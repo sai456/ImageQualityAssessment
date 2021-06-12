@@ -35,7 +35,7 @@ namespace ImageQuality.SVM
         private head_t[] head;
         private head_t lru_head;
 
-        public Cache(int count, int size)
+        public Cache(int count, long size)
         {
             _count = count;
             _size = size;

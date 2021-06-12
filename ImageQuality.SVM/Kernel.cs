@@ -18,7 +18,7 @@ namespace ImageQuality.SVM
         public abstract float[] GetQ(int column, int len);
         public abstract double[] GetQD();
 
-        public void SwapIndex(int i, int j)
+        public virtual void SwapIndex(int i, int j)
         {
             _x.SwapIndex(i, j);
 

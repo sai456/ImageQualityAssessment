@@ -44,6 +44,10 @@ namespace ImageQuality.SVM
             MaxIndex = maxIndex;
         }
 
+        public Problem()
+        {
+        }
+
         public override bool Equals(object obj)
         {
             Problem other = obj as Problem;
