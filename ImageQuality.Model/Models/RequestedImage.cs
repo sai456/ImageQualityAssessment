@@ -8,8 +8,9 @@ namespace ImageQuality.Model
     {
         public string Url { get; set; }
         public string FilePath { get; set; }
-        public bool isDownloaded { get; set; }
+        public bool IsDownloaded { get; set; }
         public Error Error { get; set; }
+
 
     }
 }

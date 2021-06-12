@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Tavisca.Content.ImageQuality.Model.Models.Errors {
+namespace ImageQuality.Model {
     using System;
     
     

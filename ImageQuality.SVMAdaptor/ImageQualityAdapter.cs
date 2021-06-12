@@ -6,18 +6,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using static ImageQuality.Model.Errors;
 using static Tavisca.Content.ImageQuality.KeyStore;
 
 namespace ImageQuality.SVMAdaptor
 {
     public class ImageQualityAdapter : IImageQualityAdapter
     {
-        public bool DeleteImage(string filePath)
+        public bool DeleteImage(string filepath)
         {
-            throw new NotImplementedException();
+            return FileHandler.DeleteFile(filepath);
         }
 
-        public Task<List<RequestedImage>> DownloadImagesAsync(List<string> urls)
+        public async Task<List<RequestedImage>> DownloadImagesAsync(List<string> urls)
         {
             var requestedImages = new List<RequestedImage>() { };
             foreach(var url in urls)
@@ -25,7 +26,7 @@ namespace ImageQuality.SVMAdaptor
                 RequestedImage requestedImage = null; 
                 if(String.IsNullOrEmpty(url))
                 {
-
+                    requestedImage = RequestedImageHandler.GetRequestedImageForNullOrEmptyURL(url);
                 }
                 else
                 {
@@ -41,13 +42,24 @@ namespace ImageQuality.SVMAdaptor
         {
             try
             {
-                return await FileHandler.Download(url,filePath)?
+                return await FileHandler.Download(url, filePath) ?
+                    RequestedImageHandler.GetRequestedImageForDownloadSuccess(url, filePath):
+                    RequestedImageHandler.GetRequestedImageForDownloadFailure(url, filePath);
+
+            }
+            catch(BaseApplicationException exception)
+            {
+                return RequestedImageHandler.GetRequestedImage(url, filePath, exception);
             }
         }
 
-        public Task<double> GetQualityScoreAsync(IList<double> brisqueFeatures)
+        public async Task<double> GetQualityScoreAsync(IList<double> brisqueFeatures)
         {
-            throw new NotImplementedException();
+            if(brisqueFeatures?.Count>0)
+            {
+                return await QualityScoreProvider.GetQualityScoreAsync(brisqueFeatures);
+            }
+            throw ServerSide.NoBrisqueFeatures();
         }
     }
 }
