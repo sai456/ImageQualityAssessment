@@ -1,5 +1,5 @@
 ﻿using ImageQuality.Model;
-using ImageQuality.Model.Contracts;
+using ImageQuality.Model;
 using ImageQuality.SVMAdaptor.Utilities;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using static ImageQuality.Model.Errors;
-using static Tavisca.Content.ImageQuality.KeyStore;
+using static ImageQuality.Model.KeyStore;
 
 namespace ImageQuality.SVMAdaptor
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tavisca.Content.ImageQuality
+namespace ImageQuality.Model
 {
     public static class KeyStore
     {

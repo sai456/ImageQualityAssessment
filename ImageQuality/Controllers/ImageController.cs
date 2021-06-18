@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ImageQuality.Service;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -7,81 +8,20 @@ using System.Threading.Tasks;
 
 namespace ImageQuality.Controllers
 {
+    [Route("api/v1.0/images")]
+    [ApiController]
     public class ImageController : Controller
     {
-        // GET: ImageController
-        public ActionResult Index()
+        private IImageQualityService _imageQualityService;
+        public ImageController(IImageQualityService imageQualityService)
         {
-            return View();
+            _imageQualityService = imageQualityService;
         }
-
-        // GET: ImageController/Details/5
-        public ActionResult Details(int id)
+        [HttpPost("qualities")]
+        public async Task<ActionResult> GetQualitiesAsync([FromBody] ImagesQualitiesRequest request)
         {
-            return View();
-        }
-
-        // GET: ImageController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ImageController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ImageController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: ImageController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ImageController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ImageController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var result = await _imageQualityService.GetQualitiesAsync(request);
+            return result == null ? (ActionResult)NotFound() : Ok(result);
         }
     }
 }

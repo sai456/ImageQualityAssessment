@@ -1,3 +1,7 @@
+using ImageQuality.Core;
+using ImageQuality.Model;
+using ImageQuality.Service;
+using ImageQuality.SVMAdaptor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +30,11 @@ namespace ImageQuality
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddScoped<IImageQualityService, Service.ImageQualityService>();
+            services.AddScoped<IImageQualityAdapter, ImageQualityAdapter>();
+            services.AddScoped<IImageQualityComponent, ImageQualityComponent>();
+            services.AddScoped<IImageFeaturesExtractor, BrisqueFeaturesExtractor>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using static ImageQuality.Model.Errors;
 
 namespace ImageQuality.SVMAdaptor.Utilities
 {
@@ -19,19 +20,10 @@ namespace ImageQuality.SVMAdaptor.Utilities
                     return true;
                 }
             }
-            catch (System.ArgumentNullException)
-            {
-                throw new ArgumentNullException();
-            }
-            catch (System.Net.WebException ex) {
-                throw new WebException();
-            }
-            catch (System.InvalidOperationException) {
-                throw new InvalidOperationException();
-            }
-            catch (Exception ex) {
-                throw new Exception();
-            }
+            catch (System.ArgumentNullException) { throw ServerSide.DownloadFailure("Null value for url or path"); }
+            catch (System.Net.WebException ex) { throw ServerSide.UrlDownloadFailure(ex.Message + "|" + ex.ToString() + "|" + path); }
+            catch (System.InvalidOperationException) { throw ServerSide.FileInUseError(); }
+            catch (Exception ex) { throw new Exception(); }
         }
 
         public static bool DeleteFile(string path)

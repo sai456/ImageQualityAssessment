@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\Components\" />
     <Folder Include="Models\CallContexts\" />
   </ItemGroup>
 
