@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ImageQuality.Model\ImageQuality.Model.csproj" />
+    <ProjectReference Include="..\ImageQuality.SVM\ImageQuality.SVM.csproj" />
+  </ItemGroup>
+
+</Project>
