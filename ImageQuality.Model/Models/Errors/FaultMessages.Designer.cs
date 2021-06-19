@@ -19,7 +19,7 @@ namespace ImageQuality.Model {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class FaultMessages {
@@ -39,7 +39,7 @@ namespace ImageQuality.Model {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Tavisca.Content.ImageQuality.Model.Models.Errors.FaultMessages", typeof(FaultMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ImageQuality.Model.Models.Errors.FaultMessages", typeof(FaultMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -59,7 +59,7 @@ namespace ImageQuality.Model {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Memory Stream was not created as the buffer was null. .
         /// </summary>
@@ -68,7 +68,7 @@ namespace ImageQuality.Model {
                 return ResourceManager.GetString("BufferNullToCreateMemoryStream", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Download of file failed.
         /// </summary>
@@ -77,7 +77,7 @@ namespace ImageQuality.Model {
                 return ResourceManager.GetString("DownloadFailure", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Image file creation failed.
         /// </summary>
@@ -86,7 +86,7 @@ namespace ImageQuality.Model {
                 return ResourceManager.GetString("FileCreationFailure", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to File is currently in use..
         /// </summary>
@@ -95,7 +95,7 @@ namespace ImageQuality.Model {
                 return ResourceManager.GetString("FileInUseError", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Invalid value provided for {0} in the request..
         /// </summary>
@@ -104,7 +104,7 @@ namespace ImageQuality.Model {
                 return ResourceManager.GetString("InvalidFieldValue", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Invalid values provided for the following request headers: {0}..
         /// </summary>
@@ -113,7 +113,7 @@ namespace ImageQuality.Model {
                 return ResourceManager.GetString("InvalidRequestHeaders", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to IO Error while reading stream.
         /// </summary>
@@ -122,7 +122,7 @@ namespace ImageQuality.Model {
                 return ResourceManager.GetString("IOErrorWhileReadingStream", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The value for the {0} field is required in the request..
         /// </summary>
@@ -131,7 +131,7 @@ namespace ImageQuality.Model {
                 return ResourceManager.GetString("MissingField", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The following request headers are required: {0}..
         /// </summary>
@@ -140,7 +140,7 @@ namespace ImageQuality.Model {
                 return ResourceManager.GetString("MissingRequestHeaders", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The image has no featurs for quality detection.
         /// </summary>
@@ -149,7 +149,7 @@ namespace ImageQuality.Model {
                 return ResourceManager.GetString("NoBrisqueFeatures", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No Urls were sent for cheking quality.
         /// </summary>
@@ -158,7 +158,7 @@ namespace ImageQuality.Model {
                 return ResourceManager.GetString("NoUrl", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Null or empty image url.
         /// </summary>
@@ -167,7 +167,7 @@ namespace ImageQuality.Model {
                 return ResourceManager.GetString("NullOrEmptyImageUrl", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Memory out of bounds while reading stream.
         /// </summary>
@@ -176,7 +176,7 @@ namespace ImageQuality.Model {
                 return ResourceManager.GetString("OutOfMemoryWhileReadingStream", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to stream reading failure.
         /// </summary>
@@ -185,7 +185,7 @@ namespace ImageQuality.Model {
                 return ResourceManager.GetString("StreamReadingFailure", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to An unexpected error has occured.
         /// </summary>
@@ -194,7 +194,7 @@ namespace ImageQuality.Model {
                 return ResourceManager.GetString("UnexpectedSystemException", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Url download failure.
         /// </summary>
@@ -203,7 +203,7 @@ namespace ImageQuality.Model {
                 return ResourceManager.GetString("UrlDownloadFailure", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The following validation errors occurred:.
         /// </summary>

@@ -39,7 +39,7 @@ namespace ImageQuality.Model {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Tavisca.Content.ImageQuality.Model.Models.Errors.FaultCodes", typeof(FaultCodes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ImageQuality.Model.Models.Errors.FaultCodes", typeof(FaultCodes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

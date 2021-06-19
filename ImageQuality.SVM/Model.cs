@@ -10,29 +10,48 @@ namespace ImageQuality.SVM
     {
         internal Model()
         {
-
         }
 
         public Parameter Parameter { get; set; }
+
+
         public int NumberOfClasses { get; set; }
+
+
         public int SupportVectorCount { get; set; }
+
         public Node[][] SupportVectors { get; set; }
+
+
         public double[][] SupportVectorCoefficients { get; set; }
+
+
         public int[] SupportVectorIndices { get; set; }
+
+
         public double[] Rho { get; set; }
+
+
         public double[] PairwiseProbabilityA { get; set; }
+
+
         public double[] PairwiseProbabilityB { get; set; }
+
+
         public int[] ClassLabels { get; set; }
+
+
         public int[] NumberOfSVPerClass { get; set; }
+
         public override bool Equals(object obj)
         {
             Model test = obj as Model;
             if (test == null)
                 return false;
+
             bool same = ClassLabels.IsEqual(test.ClassLabels);
             same = same && NumberOfClasses == test.NumberOfClasses;
             same = same && NumberOfSVPerClass.IsEqual(test.NumberOfSVPerClass);
-
             if (PairwiseProbabilityA != null)
                 same = same && PairwiseProbabilityA.IsEqual(test.PairwiseProbabilityA);
             if (PairwiseProbabilityB != null)
@@ -42,34 +61,49 @@ namespace ImageQuality.SVM
             same = same && SupportVectorCoefficients.IsEqual(test.SupportVectorCoefficients);
             same = same && SupportVectorCount == test.SupportVectorCount;
             same = same && SupportVectors.IsEqual(test.SupportVectors);
-
             return same;
-
         }
 
         public override int GetHashCode()
         {
-            return ClassLabels.ComputeHashCode()+
-                NumberOfClasses.GetHashCode()+
-                NumberOfSVPerClass.ComputeHashCode() +
-                PairwiseProbabilityA.ComputeHashCode() +
-                PairwiseProbabilityB.ComputeHashCode() +
+            return ClassLabels.ComputeHashcode() +
+                NumberOfClasses.GetHashCode() +
+                NumberOfSVPerClass.ComputeHashcode() +
+                PairwiseProbabilityA.ComputeHashcode() +
+                PairwiseProbabilityB.ComputeHashcode() +
                 Parameter.GetHashCode() +
-                Rho.ComputeHashCode() +
-                SupportVectorCoefficients.ComputeHashCode() +
+                Rho.ComputeHashcode() +
+                SupportVectorCoefficients.ComputeHashcode() +
                 SupportVectorCount.GetHashCode() +
-                SupportVectors.ComputeHashCode();
+                SupportVectors.ComputeHashcode();
+        }
+
+
+        public static Model Read(string filename)
+        {
+            FileStream input = File.OpenRead(filename);
+            try
+            {
+                return Read(input);
+            }
+            finally
+            {
+                input.Close();
+            }
         }
 
 
         public static Model Read(Stream stream)
         {
             TemporaryCulture.Start();
+
             StreamReader input = new StreamReader(stream);
-            //read Parameters
+
+            // read parameters
+
             Model model = new Model();
-            Parameter parameter = new Parameter();
-            model.Parameter = parameter;
+            Parameter param = new Parameter();
+            model.Parameter = param;
             model.Rho = null;
             model.PairwiseProbabilityA = null;
             model.PairwiseProbabilityB = null;
@@ -77,12 +111,12 @@ namespace ImageQuality.SVM
             model.NumberOfSVPerClass = null;
 
             bool headerFinished = false;
-            while(!headerFinished)
+            while (!headerFinished)
             {
                 string line = input.ReadLine();
                 string cmd, arg;
                 int splitIndex = line.IndexOf(' ');
-                if(splitIndex>=0)
+                if (splitIndex >= 0)
                 {
                     cmd = line.Substring(0, splitIndex);
                     arg = line.Substring(splitIndex + 1);
@@ -95,25 +129,28 @@ namespace ImageQuality.SVM
                 arg = arg.ToLower();
 
                 int i, n;
-                #region Reading all neccessary parameters for Svm from allmodel file
                 switch (cmd)
                 {
                     case "svm_type":
-                        parameter.SvmType = (SvmType)Enum.Parse(typeof(SvmType), arg.ToUpper());
+                        param.SvmType = (SvmType)Enum.Parse(typeof(SvmType), arg.ToUpper());
                         break;
+
                     case "kernel_type":
                         if (arg == "polynomial")
                             arg = "poly";
-                        parameter.KernelType = (KernelType)Enum.Parse(typeof(KernelType), arg.ToUpper());
+                        param.KernelType = (KernelType)Enum.Parse(typeof(KernelType), arg.ToUpper());
                         break;
+
                     case "degree":
-                        parameter.Degree = int.Parse(arg);
+                        param.Degree = int.Parse(arg);
                         break;
+
                     case "gamma":
-                        parameter.Gamma = double.Parse(arg);
+                        param.Gamma = double.Parse(arg);
                         break;
+
                     case "coef0":
-                        parameter.Coefficient0 = double.Parse(arg);
+                        param.Coefficient0 = double.Parse(arg);
                         break;
 
                     case "nr_class":
@@ -123,6 +160,7 @@ namespace ImageQuality.SVM
                     case "total_sv":
                         model.SupportVectorCount = int.Parse(arg);
                         break;
+
                     case "rho":
                         n = model.NumberOfClasses * (model.NumberOfClasses - 1) / 2;
                         model.Rho = new double[n];
@@ -130,6 +168,7 @@ namespace ImageQuality.SVM
                         for (i = 0; i < n; i++)
                             model.Rho[i] = double.Parse(rhoParts[i]);
                         break;
+
                     case "label":
                         n = model.NumberOfClasses;
                         model.ClassLabels = new int[n];
@@ -168,12 +207,11 @@ namespace ImageQuality.SVM
 
                     default:
                         throw new Exception("Unknown text in model file");
-
                 }
-                #endregion
-
             }
-            #region Reading Support Vectors from all Models file
+
+            // read sv_coef and SV
+
             int m = model.NumberOfClasses - 1;
             int l = model.SupportVectorCount;
             model.SupportVectorCoefficients = new double[m][];
@@ -199,37 +237,27 @@ namespace ImageQuality.SVM
                     model.SupportVectors[i][j].Value = double.Parse(nodeParts[1]);
                 }
             }
-            #endregion
 
             TemporaryCulture.Stop();
+
             return model;
-
         }
-        public static Model Read(string fileName)
+
+
+        public static void Write(string filename, Model model)
         {
-            FileStream input = File.OpenRead(fileName);
+            FileStream stream = File.Open(filename, FileMode.Create);
             try
             {
-                return Read(input);
+                Write(stream, model);
             }
             finally
             {
-                input.Close();
+                stream.Close();
             }
         }
 
-        public static void Write(string fileName, Model model)
-        {
-            FileStream input = File.Open(fileName, FileMode.Create);
-            try
-            {
-                Write(input, model);
-            }
-            finally
-            {
-                input.Close();
-            }
-        }
+
         public static void Write(Stream stream, Model model)
         {
             TemporaryCulture.Start();

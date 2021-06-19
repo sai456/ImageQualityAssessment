@@ -9,16 +9,14 @@ namespace ImageQuality.SVM
     {
         private int _count;
         private long _size;
-        
 
         private sealed class head_t
         {
-            private Cache _enclosingInstance;
             public head_t(Cache enclosingInstance)
             {
                 _enclosingInstance = enclosingInstance;
             }
-
+            private Cache _enclosingInstance;
             public Cache EnclosingInstance
             {
                 get
@@ -26,7 +24,6 @@ namespace ImageQuality.SVM
                     return _enclosingInstance;
                 }
             }
-
             internal head_t prev, next;
             internal float[] data;
             internal int len;
@@ -43,30 +40,32 @@ namespace ImageQuality.SVM
             for (int i = 0; i < _count; i++)
                 head[i] = new head_t(this);
             _size /= 4;
-            _size -= _count * 4;
+            _size -= _count * (16 / 4);
             lru_head = new head_t(this);
             lru_head.next = lru_head.prev = lru_head;
         }
 
         private void lru_delete(head_t h)
         {
+            // delete from current location
             h.prev.next = h.next;
             h.next.prev = h.prev;
         }
 
         private void lru_insert(head_t h)
         {
+            // insert to last position
             h.next = lru_head;
             h.prev = lru_head.prev;
             h.prev.next = h;
             h.next.prev = h;
         }
 
-        private static void swap<T> (ref T lhs, ref T rhs)
+        private static void swap<T>(ref T lhs, ref T rhs)
         {
-            T template = lhs;
+            T tmp = lhs;
             lhs = rhs;
-            rhs = template;
+            rhs = tmp;
         }
 
         public int GetData(int index, out float[] data, int len)
@@ -75,10 +74,11 @@ namespace ImageQuality.SVM
             if (h.len > 0)
                 lru_delete(h);
             int more = len - h.len;
-            if(more > 0)
+
+            if (more > 0)
             {
-                // In LRU Cache Free Old Space and Allocate New Space
-                while(_size < more)
+                // free old space
+                while (_size < more)
                 {
                     head_t old = lru_head.next;
                     lru_delete(old);
@@ -86,7 +86,8 @@ namespace ImageQuality.SVM
                     old.data = null;
                     old.len = 0;
                 }
-                // Allocate New Space
+
+                // allocate new space
                 float[] new_data = new float[len];
                 if (h.data != null)
                     Array.Copy(h.data, 0, new_data, 0, h.len);
@@ -109,7 +110,6 @@ namespace ImageQuality.SVM
                 lru_delete(head[i]);
             if (head[j].len > 0)
                 lru_delete(head[j]);
-
             swap(ref head[i].data, ref head[j].data);
             swap(ref head[i].len, ref head[j].len);
             if (head[i].len > 0)
@@ -119,25 +119,23 @@ namespace ImageQuality.SVM
 
             if (i > j)
                 swap(ref i, ref j);
-            for(head_t h = lru_head.next; h!=lru_head; h = h.next)
+
+            for (head_t h = lru_head.next; h != lru_head; h = h.next)
             {
-                if(h.len>i)
+                if (h.len > i)
                 {
                     if (h.len > j)
                         swap(ref h.data[i], ref h.data[j]);
                     else
                     {
-                        //give up
+                        // give up
                         lru_delete(h);
                         _size += h.len;
                         h.data = null;
-                        h.len = 0; 
+                        h.len = 0;
                     }
                 }
             }
-
         }
-        
-
     }
 }

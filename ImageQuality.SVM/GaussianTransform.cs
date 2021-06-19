@@ -11,36 +11,25 @@ namespace ImageQuality.SVM
     {
         private double[] _means;
         private double[] _stddevs;
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="means">Means in each dimension</param>
-        /// <param name="stddevs">Standard deviation in each dimension</param>
-        public GaussianTransform(double[] means , double[] stddevs)
-        {
-            _means = means;
-            _stddevs = stddevs;
-        }
 
         /// <summary>
-        /// Determines the Gaussian transform for the provided problem
+        /// Determines the Gaussian transform for the provided problem.
         /// </summary>
         /// <param name="prob">The Problem to analyze</param>
         /// <returns>The Gaussian transform for the problem</returns>
-
-        public static  GaussianTransform Compute(Problem prob)
+        public static GaussianTransform Compute(Problem prob)
         {
             int[] counts = new int[prob.MaxIndex];
             double[] means = new double[prob.MaxIndex];
-            foreach(Node [] sample in prob.X)
+            foreach (Node[] sample in prob.X)
             {
-                for (int i=0;i<sample.Length;i++)
+                for (int i = 0; i < sample.Length; i++)
                 {
                     means[sample[i].Index - 1] += sample[i].Value;
                     counts[sample[i].Index - 1]++;
                 }
             }
-            for(int i=0;i<prob.MaxIndex;i++)
+            for (int i = 0; i < prob.MaxIndex; i++)
             {
                 if (counts[i] == 0)
                     counts[i] = 2;
@@ -48,15 +37,15 @@ namespace ImageQuality.SVM
             }
 
             double[] stddevs = new double[prob.MaxIndex];
-            foreach(Node[] sample in prob.X)
+            foreach (Node[] sample in prob.X)
             {
-                for(int i=0;i<sample.Length;i++)
+                for (int i = 0; i < sample.Length; i++)
                 {
                     double diff = sample[i].Value - means[sample[i].Index - 1];
                     stddevs[sample[i].Index - 1] += diff * diff;
                 }
             }
-            for(int i=0;i<prob.MaxIndex;i++)
+            for (int i = 0; i < prob.MaxIndex; i++)
             {
                 if (stddevs[i] == 0)
                     continue;
@@ -65,6 +54,17 @@ namespace ImageQuality.SVM
             }
 
             return new GaussianTransform(means, stddevs);
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="means">Means in each dimension</param>
+        /// <param name="stddevs">Standard deviation in each dimension</param>
+        public GaussianTransform(double[] means, double[] stddevs)
+        {
+            _means = means;
+            _stddevs = stddevs;
         }
 
         /// <summary>
@@ -86,7 +86,6 @@ namespace ImageQuality.SVM
             TemporaryCulture.Stop();
         }
 
-
         /// <summary>
         /// Reads a GaussianTransform from the provided stream.
         /// </summary>
@@ -100,13 +99,15 @@ namespace ImageQuality.SVM
             int length = int.Parse(input.ReadLine(), CultureInfo.InvariantCulture);
             double[] means = new double[length];
             double[] stddevs = new double[length];
-            for(int i=0;i<length;i++)
+            for (int i = 0; i < length; i++)
             {
                 string[] parts = input.ReadLine().Split();
                 means[i] = double.Parse(parts[0], CultureInfo.InvariantCulture);
-                means[i] = double.Parse(parts[1], CultureInfo.InvariantCulture);
+                stddevs[i] = double.Parse(parts[1], CultureInfo.InvariantCulture);
             }
+
             TemporaryCulture.Stop();
+
             return new GaussianTransform(means, stddevs);
         }
 
@@ -116,7 +117,6 @@ namespace ImageQuality.SVM
         /// </summary>
         /// <param name="filename">The destination filename</param>
         /// <param name="transform">The transform</param>
-        
         public static void Write(string filename, GaussianTransform transform)
         {
             FileStream output = File.Open(filename, FileMode.Create);
@@ -128,7 +128,6 @@ namespace ImageQuality.SVM
             {
                 output.Close();
             }
-
         }
 
         /// <summary>
@@ -136,10 +135,9 @@ namespace ImageQuality.SVM
         /// </summary>
         /// <param name="filename">The source filename</param>
         /// <returns>The transform</returns>
- 
         public static GaussianTransform Read(string filename)
         {
-            FileStream input = File.OpenRead(filename);
+            FileStream input = File.Open(filename, FileMode.Open);
             try
             {
                 return Read(input);
@@ -148,18 +146,16 @@ namespace ImageQuality.SVM
             {
                 input.Close();
             }
-
         }
 
-
         #region IRangeTransform Members
+
         /// <summary>
         /// Transform the input value using the transform stored for the provided index.
         /// </summary>
         /// <param name="input">Input value</param>
         /// <param name="index">Index of the transform to use</param>
         /// <returns>The transformed value</returns>
-
         public double Transform(double input, int index)
         {
             index--;
@@ -177,7 +173,7 @@ namespace ImageQuality.SVM
         public Node[] Transform(Node[] input)
         {
             Node[] output = new Node[input.Length];
-            for(int i=0;i<output.Length;i++)
+            for (int i = 0; i < output.Length; i++)
             {
                 int index = input[i].Index;
                 double value = input[i].Value;

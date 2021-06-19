@@ -27,8 +27,7 @@ namespace ImageQuality.SVM
         /// nu-SVR
         /// </summary>
         NU_SVR
-    }
-
+    };
     /// <summary>
     /// Contains the various kernel types this library can use.
     /// </summary>
@@ -61,10 +60,10 @@ namespace ImageQuality.SVM
     /// is learned.  Unless you know what you are doing, chances are you are best off using
     /// the default values.
     /// </summary>
-    [Serializable]
-    public class Parameter:ICloneable
+	[Serializable]
+    public class Parameter : ICloneable
     {
-        // <summary>
+        /// <summary>
         /// Default Constructor.  Gives good default values to all parameters.
         /// </summary>
         public Parameter()
@@ -72,7 +71,7 @@ namespace ImageQuality.SVM
             SvmType = SvmType.C_SVC;
             KernelType = KernelType.RBF;
             Degree = 3;
-            Gamma = 0;
+            Gamma = 0; // 1/k
             Coefficient0 = 0;
             Nu = 0.5;
             CacheSize = 40;
@@ -82,23 +81,71 @@ namespace ImageQuality.SVM
             Shrinking = true;
             Probability = false;
             Weights = new Dictionary<int, double>();
-
-            
         }
 
+        /// <summary>
+        /// Type of SVM (default C-SVC)
+        /// </summary>
         public SvmType SvmType { get; set; }
+
+        /// <summary>
+        /// Type of kernel function (default Polynomial)
+        /// </summary>
         public KernelType KernelType { get; set; }
+
+        /// <summary>
+        /// Degree in kernel function (default 3).
+        /// </summary>
         public int Degree { get; set; }
+
+        /// <summary>
+        /// Gamma in kernel function (default 1/k)
+        /// </summary>
         public double Gamma { get; set; }
+
+        /// <summary>
+        /// Zeroeth coefficient in kernel function (default 0)
+        /// </summary>
         public double Coefficient0 { get; set; }
+
+        /// <summary>
+        /// Cache memory size in MB (default 100)
+        /// </summary>
         public double CacheSize { get; set; }
+
+        /// <summary>
+        /// Tolerance of termination criterion (default 0.001)
+        /// </summary>
         public double EPS { get; set; }
+
+        /// <summary>
+        /// The parameter C of C-SVC, epsilon-SVR, and nu-SVR (default 1)
+        /// </summary>
         public double C { get; set; }
-        public Dictionary<int,double> Weights { get; private set; }
+
+        /// <summary>
+        /// Contains custom weights for class labels.  Default weight value is 1.
+        /// </summary>
+        public Dictionary<int, double> Weights { get; private set; }
+
+        /// <summary>
+        /// The parameter nu of nu-SVC, one-class SVM, and nu-SVR (default 0.5)
+        /// </summary>
         public double Nu { get; set; }
+
+        /// <summary>
+        /// The epsilon in loss function of epsilon-SVR (default 0.1)
+        /// </summary>
         public double P { get; set; }
 
+        /// <summary>
+        /// Whether to use the shrinking heuristics, (default True)
+        /// </summary>
         public bool Shrinking { get; set; }
+
+        /// <summary>
+        /// Whether to train an SVC or SVR model for probability estimates, (default False)
+        /// </summary>
         public bool Probability { get; set; }
 
         public override bool Equals(object obj)
@@ -136,15 +183,20 @@ namespace ImageQuality.SVM
                 Probability.GetHashCode() +
                 Shrinking.GetHashCode() +
                 SvmType.GetHashCode() +
-                Weights.ToArray().ComputeHashCode();
-
+                Weights.ToArray().ComputeHashcode();
         }
 
-        #region IClonable Members
+
+        #region ICloneable Members
+        /// <summary>
+        /// Creates a memberwise clone of this parameters object.
+        /// </summary>
+        /// <returns>The clone (as type Parameter)</returns>
         public object Clone()
         {
             return base.MemberwiseClone();
         }
+
         #endregion
     }
 }

@@ -11,7 +11,7 @@ namespace ImageQuality.Service
         public ImagesQualitiesRequestValidator()
         {
             RuleFor(x => x.Urls)
-           .Cascade(CascadeMode.Stop)
+           .Cascade(CascadeMode.StopOnFirstFailure)
                .NotNull()
                .WithErrorCode(FaultCodes.MissingField)
                .WithMessage(ErrorMessages.MissingField("Urls"))

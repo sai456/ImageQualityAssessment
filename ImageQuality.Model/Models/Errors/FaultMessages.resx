@@ -159,13 +159,13 @@
   <data name="StreamReadingFailure" xml:space="preserve">
     <value>stream reading failure</value>
   </data>
+  <data name="UnexpectedSystemException" xml:space="preserve">
+    <value>An unexpected error has occured</value>
+  </data>
   <data name="UrlDownloadFailure" xml:space="preserve">
     <value>Url download failure</value>
   </data>
   <data name="ValidationFailure" xml:space="preserve">
     <value>The following validation errors occurred:</value>
-  </data>
-  <data name="UnexpectedSystemException" xml:space="preserve">
-    <value>An unexpected error has occured</value>
   </data>
 </root>

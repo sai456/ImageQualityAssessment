@@ -10,26 +10,25 @@ namespace ImageQuality.SVM
         internal int _index;
         internal double _value;
 
-        ///<summary>
-        /// Default Constructor
+        /// <summary>
+        /// Default Constructor.
         /// </summary>
-
         public Node()
         {
-
         }
         /// <summary>
-        /// Constructor
+        /// Constructor.
         /// </summary>
-        /// <param name="index">The index of the value</param>
-        /// <param name="value">The value to store</param>
+        /// <param name="index">The index of the value.</param>
+        /// <param name="value">The value to store.</param>
         public Node(int index, double value)
         {
             _index = index;
             _value = value;
         }
+
         /// <summary>
-        /// Index of this Node
+        /// Index of this Node.
         /// </summary>
         public int Index
         {
@@ -43,7 +42,7 @@ namespace ImageQuality.SVM
             }
         }
         /// <summary>
-        /// Value at Index
+        /// Value at Index.
         /// </summary>
         public double Value
         {
@@ -61,10 +60,9 @@ namespace ImageQuality.SVM
         /// String representation of this Node as {index}:{value}.
         /// </summary>
         /// <returns>{index}:{value}</returns>
-
         public override string ToString()
         {
-            return String.Format("{0}:{1}", _index, _value.Truncate());
+            return string.Format("{0}:{1}", _index, _value.Truncate());
         }
 
         public override bool Equals(object obj)
@@ -82,10 +80,11 @@ namespace ImageQuality.SVM
         }
 
         #region IComparable<Node> Members
+
         /// <summary>
-        /// Compares this node with another
+        /// Compares this node with another.
         /// </summary>
-        /// <param name="other"> The node compares to</param>
+        /// <param name="other">The node to compare to</param>
         /// <returns>A positive number if this node is greater, a negative number if it is less than, or 0 if equal</returns>
         public int CompareTo(Node other)
         {

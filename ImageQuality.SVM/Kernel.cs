@@ -23,22 +23,24 @@ namespace ImageQuality.SVM
             _x.SwapIndex(i, j);
 
             if (_xSquare != null)
+            {
                 _xSquare.SwapIndex(i, j);
+            }
         }
 
-        public static double powi(double value ,int times)
+        private static double powi(double value, int times)
         {
             double tmp = value, ret = 1.0;
-            for(int t= times;t>0;t/=2)
+
+            for (int t = times; t > 0; t /= 2)
             {
-                if(t%2==1)
-                    ret *= tmp;
-                tmp *= tmp;
+                if (t % 2 == 1) ret *= tmp;
+                tmp = tmp * tmp;
             }
             return ret;
         }
 
-        public double KernelFunction(int i,int j)
+        public double KernelFunction(int i, int j)
         {
             switch (_kernelType)
             {
@@ -57,7 +59,25 @@ namespace ImageQuality.SVM
             }
         }
 
-        public static double dot(Node[] xNodes, Node[] yNodes)
+        public Kernel(int l, Node[][] x_, Parameter param)
+        {
+            _kernelType = param.KernelType;
+            _degree = param.Degree;
+            _gamma = param.Gamma;
+            _coef0 = param.Coefficient0;
+
+            _x = (Node[][])x_.Clone();
+
+            if (_kernelType == KernelType.RBF)
+            {
+                _xSquare = new double[l];
+                for (int i = 0; i < l; i++)
+                    _xSquare[i] = dot(_x[i], _x[i]);
+            }
+            else _xSquare = null;
+        }
+
+        private static double dot(Node[] xNodes, Node[] yNodes)
         {
             double sum = 0;
             int xlen = xNodes.Length;
@@ -68,7 +88,7 @@ namespace ImageQuality.SVM
             Node y = yNodes[0];
             while (true)
             {
-                if(x._index == y._index)
+                if (x._index == y._index)
                 {
                     sum += x._value * y._value;
                     i++;
@@ -88,63 +108,42 @@ namespace ImageQuality.SVM
                         y = yNodes[j];
                         break;
                     }
-                    else
-                        break;
+                    else break;
                 }
                 else
                 {
-                    if(x._index > y._index)
+                    if (x._index > y._index)
                     {
                         ++j;
                         if (j < ylen)
                             y = yNodes[j];
-                        else
-                            break;
+                        else break;
                     }
                     else
                     {
                         ++i;
                         if (i < xlen)
                             x = xNodes[i];
-                        else
-                            break;
+                        else break;
                     }
                 }
             }
             return sum;
         }
 
-        public Kernel(int l, Node[][]x_,Parameter parameter)
-        {
-            _kernelType = parameter.KernelType;
-            _degree = parameter.Degree;
-            _gamma = parameter.Gamma;
-            _coef0 = parameter.Coefficient0;
-
-            _x = (Node[][])x_.Clone();
-
-            if (_kernelType == KernelType.RBF)
-            {
-                _xSquare = new double[l];
-                for (int i = 0; i < l; i++)
-                    _xSquare[i] = dot(_x[i], _x[i]);
-            }
-            else
-                _xSquare = null;
-        }
-
-        private static double ComputeSquaredDistance(Node[] xNodes, Node[]yNodes)
+        private static double computeSquaredDistance(Node[] xNodes, Node[] yNodes)
         {
             Node x = xNodes[0];
             Node y = yNodes[0];
             int xLength = xNodes.Length;
             int yLength = yNodes.Length;
-            int xIndex = 0, yIndex = 0;
+            int xIndex = 0;
+            int yIndex = 0;
             double sum = 0;
 
-            while(true)
+            while (true)
             {
-                if(x._index==y._index)
+                if (x._index == y._index)
                 {
                     double d = x._value - y._value;
                     sum += d * d;
@@ -165,28 +164,25 @@ namespace ImageQuality.SVM
                         y = yNodes[yIndex];
                         break;
                     }
-                    else
-                        break;
+                    else break;
                 }
-                else if(x._index>y._index)
+                else if (x._index > y._index)
                 {
                     sum += y._value * y._value;
                     if (++yIndex < yLength)
                         y = yNodes[yIndex];
-                    else
-                        break;
+                    else break;
                 }
                 else
                 {
                     sum += x._value * x._value;
                     if (++xIndex < xLength)
                         x = xNodes[xIndex];
-                    else
-                        break;
-
+                    else break;
                 }
             }
-            for(;xIndex<xLength;xIndex++)
+
+            for (; xIndex < xLength; xIndex++)
             {
                 double d = xNodes[xIndex]._value;
                 sum += d * d;
@@ -200,9 +196,10 @@ namespace ImageQuality.SVM
 
             return sum;
         }
-        public static double KernelFunction(Node[] x , Node[]y,Parameter param)
+
+        public static double KernelFunction(Node[] x, Node[] y, Parameter param)
         {
-            switch(param.KernelType)
+            switch (param.KernelType)
             {
                 case KernelType.LINEAR:
                     return dot(x, y);
@@ -210,7 +207,7 @@ namespace ImageQuality.SVM
                     return powi(param.Degree * dot(x, y) + param.Coefficient0, param.Degree);
                 case KernelType.RBF:
                     {
-                        double sum = ComputeSquaredDistance(x, y);
+                        double sum = computeSquaredDistance(x, y);
                         return Math.Exp(-param.Gamma * sum);
                     }
                 case KernelType.SIGMOID:
@@ -221,6 +218,5 @@ namespace ImageQuality.SVM
                     return 0;
             }
         }
-
     }
 }

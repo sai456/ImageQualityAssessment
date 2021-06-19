@@ -9,6 +9,7 @@ namespace ImageQuality.SVM
     internal static class TemporaryCulture
     {
         private static CultureInfo _culture;
+
         public static void Start()
         {
             _culture = Thread.CurrentThread.CurrentCulture;

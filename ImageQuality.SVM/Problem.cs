@@ -9,6 +9,26 @@ namespace ImageQuality.SVM
     public class Problem
     {
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="count">Number of vectors</param>
+        /// <param name="y">The class labels</param>
+        /// <param name="x">Vector data.</param>
+        /// <param name="maxIndex">Maximum index for a vector</param>
+        public Problem(int count, double[] y, Node[][] x, int maxIndex)
+        {
+            Count = count;
+            Y = y;
+            X = x;
+            MaxIndex = maxIndex;
+        }
+        /// <summary>
+        /// Empty Constructor.  Nothing is initialized.
+        /// </summary>
+        public Problem()
+        {
+        }
+        /// <summary>
         /// Number of vectors.
         /// </summary>
         public int Count { get; set; }
@@ -28,26 +48,6 @@ namespace ImageQuality.SVM
         /// </summary>
         public int MaxIndex { get; set; }
 
-
-        ///<summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="count">Number of vectors</param>
-        /// <param name="y">The Class labels</param>
-        /// <param name="x"> Vector data.</param>
-        /// <param name="maxIndex">Maximum index for a vector</param>
-        public Problem(int count, double[] y, Node[][] x, int maxIndex)
-        {
-            Count = count;
-            X = x;
-            Y = y;
-            MaxIndex = maxIndex;
-        }
-
-        public Problem()
-        {
-        }
-
         public override bool Equals(object obj)
         {
             Problem other = obj as Problem;
@@ -64,16 +64,15 @@ namespace ImageQuality.SVM
         {
             return Count.GetHashCode() +
                 MaxIndex.GetHashCode() +
-                X.ComputeHashCode() +
-                Y.ComputeHashCode();
+                X.ComputeHashcode() +
+                Y.ComputeHashcode();
         }
 
-        ///<summary>
-        ///Reads a problem from a stream
+        /// <summary>
+        /// Reads a problem from a stream.
         /// </summary>
-        /// <param name="="stream"> Stream to read from</param>
+        /// <param name="stream">Stream to read from</param>
         /// <returns>The problem</returns>
-        
         public static Problem Read(Stream stream)
         {
             TemporaryCulture.Start();
@@ -83,14 +82,14 @@ namespace ImageQuality.SVM
             List<Node[]> vx = new List<Node[]>();
             int max_index = 0;
 
-            while(input.Peek() > -1)
+            while (input.Peek() > -1)
             {
                 string[] parts = input.ReadLine().Trim().Split();
 
                 vy.Add(double.Parse(parts[0]));
                 int m = parts.Length - 1;
                 Node[] x = new Node[m];
-                for(int j=0;j<m;j++)
+                for (int j = 0; j < m; j++)
                 {
                     x[j] = new Node();
                     string[] nodeParts = parts[j + 1].Split(':');
@@ -104,7 +103,7 @@ namespace ImageQuality.SVM
 
             TemporaryCulture.Stop();
 
-            return new Problem(vy.Count,vy.ToArray(),vx.ToArray(),max_index);
+            return new Problem(vy.Count, vy.ToArray(), vx.ToArray(), max_index);
         }
 
         /// <summary>
@@ -112,17 +111,16 @@ namespace ImageQuality.SVM
         /// </summary>
         /// <param name="stream">The stream to write the problem to.</param>
         /// <param name="problem">The problem to write.</param>
-        
-        public static void Write(Stream stream , Problem problem)
+        public static void Write(Stream stream, Problem problem)
         {
             TemporaryCulture.Start();
 
             StreamWriter output = new StreamWriter(stream);
-            for(int i=0;i<problem.Count;i++)
+            for (int i = 0; i < problem.Count; i++)
             {
                 output.Write(problem.Y[i]);
-                for(int j=0;j<problem.X[i].Length;j++)
-                    output.Write("{0}:{1:0.000000}", problem.X[i][j].Index, problem.X[i][j].Value);
+                for (int j = 0; j < problem.X[i].Length; j++)
+                    output.Write(" {0}:{1:0.000000}", problem.X[i][j].Index, problem.X[i][j].Value);
                 output.Write("\n");
             }
             output.Flush();
@@ -135,7 +133,6 @@ namespace ImageQuality.SVM
         /// </summary>
         /// <param name="filename">The file to read from.</param>
         /// <returns>the Probem</returns>
-        
         public static Problem Read(string filename)
         {
             FileStream input = File.OpenRead(filename);
@@ -159,7 +156,7 @@ namespace ImageQuality.SVM
             FileStream output = File.Open(filename, FileMode.Create);
             try
             {
-                 Write(output,problem);
+                Write(output, problem);
             }
             finally
             {
